@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = null;
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<div class="text-center">
+    <h1 class="display-4">Find the prime factorization of a number</h1>
+    <input type="number" id="inputNum" />
+    <input type="button" id="btnSubmit" value="Submit" onclick="btnSubmitClick()"/>
+        <table class="table table-responsive table-striped table-bordered table-hover"    
+           id="TableId"    
+           cellspacing="0"    
+           align="center"    
+           width="100%">    
+    </table>   
+</div>
+
+
+<script>
+    function btnSubmitClick() {
+        var number = $("#inputNum").val();
+        if (Number.isInteger(Number(number)) && number != null && number != '') {
+            getFactorization(number);
+        }
+        else {
+            alert("Entered number cannot be blank and must be an integer");
+        }
+    }
+
+    function getFactorization(number) {
+        var numToFactorize = { Value: number };
+        $.ajax({
+            url: "/Home/GetFactorization",
+            method: "POST",
+            dataType: "JSON",
+            data: { numToFactorize: JSON.stringify(numToFactorize) },
+            success: function(data) {
+                alert(data);
+            },
+            error: function(response) {
+                debugger;
+                console.error("error");
+            }
+        })
+    }
+</script>
