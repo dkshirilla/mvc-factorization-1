@@ -60,8 +60,9 @@ namespace mvc_factorization_1.Controllers
             {
                 result = "There is no Prime factor for " + num;
             }
-           
-            return Json(result);
+
+            List<string> res = result.Split(' ').ToList();
+            return Json(res);
         }
 
         public class Number

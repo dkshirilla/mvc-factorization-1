@@ -5,17 +5,17 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+<script src="js/jput.min.js"></script>
+
 <div class="text-center">
     <h1 class="display-4">Find the prime factorization of a number</h1>
     <input type="number" id="inputNum" />
-    <input type="button" id="btnSubmit" value="Submit" onclick="btnSubmitClick()"/>
-        <table class="table table-responsive table-striped table-bordered table-hover"    
-           id="TableId"    
-           cellspacing="0"    
-           align="center"    
-           width="100%">    
-    </table>   
+    <input type="button" id="btnSubmit" value="Submit" onclick="btnSubmitClick()" />
+
+    <table id="tblResult">
+    </table>
 </div>
+
 
 
 <script>
@@ -37,7 +37,12 @@
             dataType: "JSON",
             data: { numToFactorize: JSON.stringify(numToFactorize) },
             success: function(data) {
-                alert(data);
+                //alert(data);
+                //debugger;
+                $("#tblResult tr").remove();
+                data.forEach(fillTable);
+                addTableHeader(number);
+
             },
             error: function(response) {
                 debugger;
@@ -45,4 +50,26 @@
             }
         })
     }
+
+    function fillTable(i) {
+        if (i != null && i != "") {
+            var table = document.getElementById("tblResult");
+            var row = table.insertRow(0);
+            var cell1 = row.insertCell(0);
+            cell1.innerHTML = i;
+        }
+    }
+    function addTableHeader(number) {
+        var table = document.getElementById("tblResult");
+        var header = table.createTHead();
+        var row = header.insertRow(0);
+        var cell = row.insertCell(0);
+        cell.innerHTML = "<b>Prime Factors of " + number + "</b>";
+    }
 </script>
+
+<style>
+    table, th, td {
+        border: 1px solid;
+    }
+</style>
