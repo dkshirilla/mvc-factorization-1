@@ -1,24 +1,24 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-    Layout = null;
-}
+﻿@*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-
-<script src="js/jput.min.js"></script>
-
-<div class="text-center">
-    <h1 class="display-4">Find the prime factorization of a number</h1>
+<div class="container">
+    <h1>Find the prime factorization of a number</h1>
+</div>
+<div class="container">
     <input type="number" id="inputNum" />
+</div>
+<div class="container">
     <input type="button" id="btnSubmit" value="Submit" onclick="btnSubmitClick()" />
-
-    <table id="tblResult">
-    </table>
+</div>
+<div class="container">
+    <table id="tblResult"/>
 </div>
 
-
-
 <script>
+    $( document ).ready(function() {
+        $('#tblResult').addClass('display-none');
+    });
+
     function btnSubmitClick() {
         var number = $("#inputNum").val();
         if (Number.isInteger(Number(number)) && number != null && number != '') {
@@ -39,13 +39,19 @@
             success: function(data) {
                 //alert(data);
                 //debugger;
-                $("#tblResult tr").remove();
-                data.forEach(fillTable);
-                addTableHeader(number);
-
+                if (data == "none") {
+                    alert("Entered number has no prime factors");
+                }
+                else {
+                    $('#tblResult').removeClass('display-none');
+                    $("#tblResult tr").remove();
+                    data.forEach(fillTable);
+                    addTableHeader(number);
+                }
             },
-            error: function(response) {
+            error: function(result) {
                 debugger;
+                $('#tblResult').addClass('display-none');
                 console.error("error");
             }
         })
@@ -56,6 +62,7 @@
             var table = document.getElementById("tblResult");
             var row = table.insertRow(0);
             var cell1 = row.insertCell(0);
+            cell1.className = 'center';
             cell1.innerHTML = i;
         }
     }
@@ -72,4 +79,16 @@
     table, th, td {
         border: 1px solid;
     }
+
+    .container {
+  display: flex;
+  justify-content: center;
+}
+
+.display-none{
+    display: none;
+}
+.center{
+    text-align:center;
+}
 </style>

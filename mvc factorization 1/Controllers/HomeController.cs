@@ -10,27 +10,22 @@ namespace mvc_factorization_1.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        private Numz _number;
+        public HomeController()
         {
-            return View();
+            _number = new Numz();
         }
+
         [HttpPost]
         public JsonResult GetFactorization(string numToFactorize = "")
         {
-            Number n = JsonConvert.DeserializeObject<Number>(numToFactorize);
-            int num = n.Value;
+            _number = JsonConvert.DeserializeObject<Numz>(numToFactorize);
+            int num = _number.Value;
             int b;
             string result = "";
             int count = 0;
@@ -58,22 +53,15 @@ namespace mvc_factorization_1.Controllers
             }
             if (flag == 0)
             {
-                result = "There is no Prime factor for " + num;
+                //result = "There is no Prime factor for " + num;
+                return Json("none");
             }
-
-            List<string> res = result.Split(' ').ToList();
-            return Json(res);
-        }
-
-        public class Number
-        {
-            public int Value { get; set; }
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            else
+            {
+                List<string> res = result.Split(' ').ToList();
+                res.RemoveAll(s => s == "");
+                return Json(res);
+            }
         }
     }
 }
